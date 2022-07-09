@@ -17,5 +17,6 @@
 
 - Range based loop in C[C11]
 
-- Makefile
-    - For study makefile
+- build.sh with makefile
+    - build.sh make a object file in target directory and result move to ./object/
+    - ./build.sh <target directory list>
