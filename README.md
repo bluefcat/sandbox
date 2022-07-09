@@ -11,3 +11,6 @@
 - Math Library in basic level[C11]
     - Solve the GCD problem
 
+- Encryption Alogorithm in basic level[C11]
+    - ElGamal Algorithm
+    - RSA Algorithm
