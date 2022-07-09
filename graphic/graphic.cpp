@@ -222,6 +222,9 @@ void Marquee::event(){
         for(int i = 0; i < content_.size(); i ++){
             if(clockwise_) string_position_[i] += (int)move_;
             else{
+                /*
+                * x-n (mod m) is chanced x + (m-n) (mod m)
+                */
                 string_position_[i] += ((int)((value_ * width_)) - (int)move_);
             }
             
