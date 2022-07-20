@@ -5,8 +5,19 @@ void moveCursor(int x, int y){
     return;
 }
 
+void endHandler(Display* display){
+    std::packaged_task<void()> task([&](){ display->drawEnd(); });
+    std::future<void> flag = task.get_future();
+
+    std::thread th(std::move(task));
+
+    flag.get();
+    th.join();
+    return;
+}
+
 Display::Display(long double FPS)
-:FPS_(FPS), timing_(1.l/FPS), drawing_(true){
+:FPS_(FPS), timing_(1.l/FPS), drawing_(false), drawend_(true){
     struct winsize w;
     ioctl(fileno(stdout), TIOCGWINSZ, &w);
 
@@ -24,7 +35,9 @@ void Display::append(Object* object){
 }
 
 void Display::draw(){
+    drawing_ = true;
     while(drawing_){
+        drawend_ = false;
         timer[0] = steady_clock::now();
         //Object draw start part
 
@@ -56,7 +69,18 @@ void Display::draw(){
             moveCursor(3, console_height_ - 1);
             printf("DRAW: %.5Lf, WATING: %.5Lf D+W: %.5LF", (long double)draw_rate.count() / 1000.f, wating_, (long double)draw_rate.count() / 1000.f + wating_);
         #endif
+        drawend_ = true;
     }
+}
+
+void Display::drawEnd(){
+    drawing_ = false;
+
+    while(!drawend_){
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    }
+
+    return;
 }
 
 const long double Display::getFPS(){
@@ -72,6 +96,7 @@ const long double Display::getWating(){
 }
 
 Display::~Display(){
+    drawing_ = false;
     printf("\e[?25h");  //show cursor
     system("clear");
 }

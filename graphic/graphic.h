@@ -5,6 +5,10 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
+#include <thread>
+#include <future>
+#include <unistd.h>
+#include <signal.h>
 #include <sys/ioctl.h>
 
 //use for ns, 
@@ -14,10 +18,10 @@ using std::chrono::milliseconds;
 using std::chrono::steady_clock;
 
 using uint = unsigned int;
+class Display;
 
 void moveCursor(int x, int y);  
-
-class Display;
+void endHandler(Display* display);
 
 class Object{
     public:
@@ -70,6 +74,7 @@ class Display{
         void append(Object*);
 
         void draw();
+        void drawEnd();
         
         const long double getFPS();
         const long double getRealFPS();
@@ -95,6 +100,7 @@ class Display{
 
         //drawing signal
         bool drawing_;
+        bool drawend_;
 
         //objects for drawing
         std::vector<Object*> objects_;
