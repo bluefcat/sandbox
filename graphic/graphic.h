@@ -167,3 +167,15 @@ class Marquee: public Object{
 
         int value_;
 };
+
+class Line: public Object{
+    public:
+        Line(int x1, int y1, int x2, int y2);
+
+        virtual void draw() override;
+        virtual void redraw(int, int) override;
+
+    private:
+        int x2_, y2_;
+        int dx_, dy_;
+};

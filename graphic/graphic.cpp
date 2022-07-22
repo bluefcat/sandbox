@@ -270,3 +270,55 @@ void Marquee::setY(int y){
     y_ = y;
     text_y_ = y;
 }
+
+
+Line::Line(int x1, int y1, int x2, int y2)
+:Object(x1, y1, std::abs(x1-x2), std::abs(y1-y2)){
+    x2_ = x2;
+    y2_ = y2;
+    dx_ = std::abs(x2 - x1);
+    dy_ = std::abs(y2 - y1);
+};
+
+void Line::draw(){
+    int factor_x = (x2_ >= x_)? 1: -1;
+    int factor_y = (y2_ >= y_)? 1: -1;
+
+    if(dx_ > dy_){
+        int y = y_;
+        int det = (dy_ << 1) - dx_;
+
+        for(int x = x_; x != x2_; x += factor_x){
+            if(det < 0){
+                det += dy_ << 1;
+            }
+            else{
+                y += factor_y;
+                det += (dy_ - dx_) << 1;
+            }
+
+            moveCursor(x, y);
+            printf("@");
+        }
+    }
+    else{
+        int x = x_;
+        int det = (dx_ << 1) - dy_;
+
+        for(int y = y_; y != y2_; y += factor_y){
+            if(det < 0){
+                det += dx_ << 1;
+            }
+            else{
+                x += factor_x;
+                det += (dx_ - dy_) << 1;
+            }
+
+            moveCursor(x, y);
+            printf("@");
+        }
+    }
+
+};
+
+void Line::redraw(int x, int y){};
