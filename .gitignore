@@ -1,3 +1,2 @@
-*.out
-*.o
-object/
+.cache/
+build/
